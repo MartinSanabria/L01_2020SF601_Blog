@@ -29,6 +29,21 @@ namespace L01_2020SF601.Controllers
         /// </summary>
         /// <param name="nombre"></param>
         /// <returns></returns>
+        /// 
+        [HttpGet]
+        [Route("getbyid/{id}")]
+        public IActionResult get(int id)
+        {
+            Usuario? usuario = (from e in _blogContext.usuarios
+                               where e.usuarioId == id
+                               select e).FirstOrDefault();
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return Ok(usuario);
+        }
+
         [HttpGet]
         [Route("getbynombre/{nombre}/{apellido}")]
         public IActionResult getUserName(string nombre, string apellido)
@@ -128,6 +143,7 @@ namespace L01_2020SF601.Controllers
             if(usuarioD == null) { return NotFound(); }
             _blogContext.usuarios.Attach(usuarioD);
             _blogContext.usuarios.Remove(usuarioD);
+            _blogContext.SaveChanges();
 
             return Ok();
         }
